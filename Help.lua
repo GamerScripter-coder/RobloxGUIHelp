@@ -1,4 +1,5 @@
 local Help = {}
+local H = Help
 
 --Services
 local UIS = game:GetService("UserInputService")
@@ -47,16 +48,16 @@ function Help:CreateClickEffect(parent, iconId, nicon)
   if not parent then return end
   if not iconId then return end
 
-  local pulsante = parent
-  local rng = Random.new()
+local pulsante = parent
+local TweenService = game:GetService("TweenService")
+local rng = Random.new()
 
 -- IMPOSTAZIONI PERSONALIZZABILI
 local ID_ICONA = iconId -- Sostituisci con il tuo ID Asset
-local NUMERO_ICONE = nicon or 21                    -- Quante icone generare a ogni click
+local NUMERO_ICONE = nicon                    -- Quante icone generare a ogni click
 local DIMENSIONE_ICONA = UDim2.new(0, 45, 0, 45) -- Dimensione finale dell'icona
-local TEMPO_ANIMAZIONE_APRI = 0.5          -- Durata dello spargimento iniziale
-local TEMPO_ATTESA = 0.7                  -- Tempo prima che inizino a scomparire (in secondi)
-local TEMPO_ANIMAZIONE_CHIUDI = 0.5        -- Durata della dissolvenza finale
+local TEMPO_ANIMAZIONE_APRI = 0.7          -- Durata dello spargimento iniziale
+local TEMPO_ANIMAZIONE_CHIUDI = 0.7        -- Durata della dissolvenza finale
 local DoingEffect = false
 
 -- 🛠️ IMPOSTAZIONI DEL RAGGIO (IN PIXEL)
@@ -67,7 +68,6 @@ local RAGGIO_MASSIMO = 95                 -- Distanza massima dal pulsante
 
 pulsante.MouseButton1Click:Connect(function()
 	if DoingEffect == true then return end
-	print(tostring(DoingEffect))
 	DoingEffect = true
 	-- Calcola il centro attuale del pulsante sullo schermo
 	local centroX = pulsante.AbsolutePosition.X + (pulsante.AbsoluteSize.X / 2)
@@ -109,33 +109,62 @@ pulsante.MouseButton1Click:Connect(function()
 			Size = DIMENSIONE_ICONA
 		})
 		apriTween:Play()
-	end
-
-	-- Timer per farle scomparire dopo 2.5 secondi
-	task.delay(TEMPO_ATTESA, function()
 		local infoChiudi = TweenInfo.new(TEMPO_ANIMAZIONE_CHIUDI, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-
-		for _, icona in ipairs(gruppoIcone) do
-			if icona and icona.Parent then
-				local derivaX = icona.Position.X.Offset + rng:NextNumber(-20, 20)
-				local derivaY = icona.Position.Y.Offset + rng:NextNumber(30, 60)
-				local posizioneScomparsa = UDim2.new(0, derivaX, 0, derivaY)
-
-				local chiudiTween = TweenService:Create(icona, infoChiudi, {
-					Position = posizioneScomparsa,
-					ImageTransparency = 1,
-					Size = UDim2.new(0, 10, 0, 10)
-				})
-				chiudiTween:Play()
-
-				task.delay(TEMPO_ANIMAZIONE_CHIUDI, function()
-					icona:Destroy()
-					DoingEffect = false
-				end)
-			end
-		end
-	end)
+		local chiudiTween = TweenService:Create(icona, infoChiudi, {
+			ImageTransparency = 1,
+		})
+		chiudiTween:Play()
+		task.delay(TEMPO_ANIMAZIONE_CHIUDI, function()
+			icona:Destroy()
+			DoingEffect = false
+		end)
+	end
 end)
+end
+
+function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt)
+	if not parent then return end
+	if not imgId then return end
+	if not iconId then return end
+	if not txt then txt = "Label" end
+	local ImgBtn = Instance.new("ImageButton")
+	ImgBtn.ScaleType = Enum.ScaleType.Tile
+	ImgBtn.BackgroundColor3 = Color3.fromRGB(94, 167, 255)
+	ImgBtn.Image = imgId
+	ImgBtn.TileSize = UDim2.new(0, 100, 0, 100)
+	ImgBtn.Size = UDim2.new(0, 98, 0, 107)
+	ImgBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ImgBtn.Parent = parent
+
+	local SquareBtn = Instance.new("UIAspectRatioConstraint")
+	SquareBtn.Parent = ImgBtn
+
+	local GradientBtn = Instance.new("UIGradient")
+	GradientBtn.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(0, 171, 255)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(0, 171, 255))}
+
+	local StrokeBtn = Instance.new("UIStroke")
+	StrokeBtn.Thickness = 5
+
+	local Label = Instance.new("TextLabel")
+	Label.TextWrapped = true
+	Label.TextSize = 33
+	Label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Label.FontFace = Font.new([[rbxasset://fonts/families/PressStart2P.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+	Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Label.BackgroundTransparency = 1
+	Label.Size = UDim2.new(1, 0, 1, 0)
+	Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Label.Parent = ImgBtn
+
+	local SquareLbl = Instance.new("UIAspectRatioConstraint")
+	SquareLbl.Parent = Label
+
+	local StrokeLbl = Instance.new("UIStroke")
+	StrokeLbl.Thickness = 2
+	StrokeLbl.Parent = Label
+
+	H:CreateShake(ImgBtn)
+	H:CreateClickEffect(ImgBtn, iconId, nicon)
 end
 
 -- contiue tomorrow
