@@ -264,7 +264,7 @@ RunService.RenderStepped:Connect(aggiornaOndaSmooth)
 end
 
 function Help:CreateBigEffect(parent)
-	if not parent then reutrn end
+	if not parent then return end
 
 local ImageButton = script.Parent
 
