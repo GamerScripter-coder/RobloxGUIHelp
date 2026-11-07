@@ -122,6 +122,148 @@ pulsante.MouseButton1Click:Connect(function()
 end)
 end
 
+function Help:CreateBurst(parent)
+local Img = Instance.new("ImageLabel")
+Img.Name = "Burst"
+Img.BackgroundTransparency = 1
+Img.ZIndex = 0
+Img.Image = "rbxassetid://84880292033466"
+Img.Parent = parent
+
+local uiElement = parent
+local velocitaRotazione = 45
+
+RunService.RenderStepped:Connect(function(deltaTime)
+	uiElement.Rotation = uiElement.Rotation + (velocitaRotazione * deltaTime)
+end)
+end
+
+function Help:CreateImageFall(parent, iconId)
+	if not parent then return end
+	if not iconId then return end
+local parentUI = parent
+
+local IMAGE_ID = iconId -- Sostituisci con il tuo ID immagine
+local FREQUENZA_SPAWN = 0.3 -- Ogni quanti secondi spawna una cometa
+local VELOCITA_CADUTA = 1.5 -- Quanto tempo (in secondi) ci mette a scendere
+local DIMENSIONE_COMETA = UDim2.new(0, 40, 0, 40) -- Larghezza e altezza in pixel
+
+local ultimoSpawn = 0
+
+-- Funzione per creare una cometa
+local function creaCometa()
+	local cometa = Instance.new("ImageLabel")
+	cometa.Image = IMAGE_ID
+	cometa.Size = DIMENSIONE_COMETA
+	cometa.BackgroundTransparency = 1
+	cometa.AnchorPoint = Vector2.new(0.5, 0.5)
+
+	-- Posizione iniziale X casuale (tra 0% e 100% del parent), in alto fuori dallo schermo (Y = -0.1)
+	local coordinataXCasuale = math.random()
+	cometa.Position = UDim2.new(coordinataXCasuale, 0, -0.1, 0)
+	cometa.Parent = parentUI
+
+	-- Configura il movimento verso il basso e la sparizione (Fade Out)
+	local posizioneFinale = UDim2.new(coordinataXCasuale + 0.1, 0, 1.1, 0) -- Scende diagonale
+	local infoTween = TweenInfo.new(VELOCITA_CADUTA, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+
+	local tweenMovimento = TweenService:Create(cometa, infoTween, {
+		Position = posizioneFinale,
+		ImageTransparency = 1 -- Scompare gradualmente
+	})
+
+	-- Avvia l'animazione e distrugge l'oggetto alla fine per non intasare la memoria
+	tweenMovimento:Play()
+	tweenMovimento.Completed:Connect(function()
+		cometa:Destroy()
+	end)
+end
+
+-- Ciclo di controllo temporale fluido
+RunService.RenderStepped:Connect(function()
+	local tempoAttuale = os.clock()
+	if tempoAttuale - ultimoSpawn >= FREQUENZA_SPAWN then
+		ultimoSpawn = tempoAttuale
+		creaCometa()
+	end
+end)
+end
+
+function Help:CreateTextSmooth(label)
+if not label then return end
+if not label:IsA("TextLabel") then return end
+local textLabel = script.Parent
+textLabel.RichText = true
+
+-- Configurazione dell'animazione
+local TEMPO_PER_LETTERA = 0.35 -- Tempo (in secondi) di permanenza della luce su ogni carattere
+local LARGHEZZA_SCIA = 1.5       -- Ampiezza della sfumatura luminosa
+local PAUSA_INIZIALE = 0.4     -- Tempo extra (in secondi) in cui la luce si ferma sulla PRIMA lettera prima di muoversi
+
+-- Colori di base (RGB)
+local R_BASE, G_BASE, B_BASE = 198, 198, 198   -- Lettere spente (Grigio)
+local R_LUCE, G_LUCE, B_LUCE = 255, 255, 255   -- Lettera illuminata (Bianco)
+
+-- Prende il testo della TextLabel
+local testoOriginale = textLabel.Text
+local lunghezzaTesto = utf8.len(testoOriginale)
+local tempoIniziale = os.clock()
+
+local function aggiornaOndaSmooth()
+	local tempoTrascorso = os.clock() - tempoIniziale
+
+	-- La durata totale include il tempo per scorrere il testo + la pausa sulla prima lettera
+	local durataMovimento = lunghezzaTesto * TEMPO_PER_LETTERA
+	local durataTotaleCiclo = durataMovimento + PAUSA_INIZIALE
+
+	-- Ricomincia istantaneamente da capo senza delay esterni
+	local tempoCorrenteCiclo = tempoTrascorso % durataTotaleCiclo
+
+	local posizioneLuce
+	if tempoCorrenteCiclo < PAUSA_INIZIALE then
+		-- Durante la pausa iniziale, la luce resta bloccata esattamente sulla prima lettera (indice 1)
+		posizioneLuce = 1
+	else
+		-- Finita la pausa, la luce inizia a scorrere normalmente lungo il testo
+		local tempoEffettivoMovimento = tempoCorrenteCiclo - PAUSA_INIZIALE
+		posizioneLuce = (tempoEffettivoMovimento / TEMPO_PER_LETTERA) + 1
+	end
+
+	local testoFormattato = ""
+
+	for i = 1, lunghezzaTesto do
+		local offset = utf8.offset(testoOriginale, i)
+		local prossimoOffset = utf8.offset(testoOriginale, i + 1)
+		local carattere = string.sub(testoOriginale, offset, prossimoOffset and (prossimoOffset - 1) or #testoOriginale)
+
+		if carattere == " " then
+			testoFormattato = testoFormattato .. " "
+		else
+			-- Calcola la distanza tra la lettera corrente e il centro della luce
+			local distanza = math.abs(i - posizioneLuce)
+
+			-- Fattore di interpolazione (0.0 a 1.0)
+			local fattoreLuce = math.clamp(1 - (distanza / LARGHEZZA_SCIA), 0, 1)
+
+			-- Smoothstep per rendere la transizione morbida
+			fattoreLuce = fattoreLuce * fattoreLuce * (3 - 2 * fattoreLuce)
+
+			-- Sfuma linearmente i valori RGB
+			local r = math.round(R_BASE + (R_LUCE - R_BASE) * fattoreLuce)
+			local g = math.round(G_BASE + (G_LUCE - G_BASE) * fattoreLuce)
+			local b = math.round(B_BASE + (B_LUCE - B_BASE) * fattoreLuce)
+
+			-- Aggiunge il carattere formattato
+			testoFormattato = testoFormattato .. string.format('<font color="rgb(%d,%d,%d)">%s</font>', r, g, b, carattere)
+		end
+	end
+
+	textLabel.Text = testoFormattato
+end
+
+RunService.RenderStepped:Connect(aggiornaOndaSmooth)
+end
+
 function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt)
 	if not parent then return end
 	if not imgId then return end
@@ -150,9 +292,8 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt)
 	local Label = Instance.new("TextLabel")
 	Label.TextWrapped = true
 	Label.TextSize = 33
-	Label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Label.FontFace = Font.new([[rbxasset://fonts/families/PressStart2P.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-	Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Label.TextColor3 = Color3.fromRGB(198, 198, 198)
 	Label.BackgroundTransparency = 1
 	Label.Size = UDim2.new(1, 0, 1, 0)
 	Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -167,6 +308,9 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt)
 
 	H:CreateShake(ImgBtn)
 	H:CreateClickEffect(ImgBtn, iconId, nicon)
+	H:CreateBurst(ImgBtn)
+	H:CreateTextSmooth(Label)
+	H:CreateImageFall(ImgBtn, iconId)
 end
 
 -- contiue tomorrow
