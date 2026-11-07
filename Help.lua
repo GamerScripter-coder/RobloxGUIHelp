@@ -263,11 +263,167 @@ end
 RunService.RenderStepped:Connect(aggiornaOndaSmooth)
 end
 
-function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt)
+function Help:CreateBigEffect(parent)
+	if not parent then reutrn end
+
+local ImageButton = script.Parent
+
+-- Aggiungi un UIScale se non esiste già
+local uiScale = ImageButton:FindFirstChildOfClass("UIScale")
+if not uiScale then
+	uiScale = Instance.new("UIScale")
+	uiScale.Parent = ImageButton
+end
+
+-- Parametri dell'animazione (durata e stile)
+local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+-- Dimensioni: 1 è la grandezza normale, 1.2 è il 20% più grande (puoi modificarlo)
+local scaleNormal = {Scale = 1}
+local scaleBig = {Scale = 1.05}
+
+-- Quando il mouse entra sopra l'ImageButton
+ImageButton.MouseEnter:Connect(function()
+	TweenService:Create(uiScale, tweenInfo, scaleBig):Play()
+end)
+
+-- Quando il mouse esce dall'ImageButton
+ImageButton.MouseLeave:Connect(function()
+	TweenService:Create(uiScale, tweenInfo, scaleNormal):Play()
+end)
+end
+
+function Help:CreateTurnEffect(parent)
+	if not parent then return end
+local Btn = parent
+
+-- Configurazione del Tween (durata di 0.2 secondi, stile fluido)
+local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+local originalRot = Btn.Rotation
+local targetRot = -45
+
+-- Creazione delle animazioni
+local tweenEnter = TweenService:Create(Btn, tweenInfo, {Rotation = targetRot})
+local tweenLeave = TweenService:Create(Btn, tweenInfo, {Rotation = originalRot})
+
+-- Collegamento degli eventi
+Btn.MouseEnter:Connect(function()
+	tweenLeave:Cancel() -- Interrompe l'animazione di ritorno se attiva
+	tweenEnter:Play()
+end)
+
+Btn.MouseLeave:Connect(function()
+	tweenEnter:Cancel() -- Interrompe l'animazione di andata se attiva
+	tweenLeave:Play()
+end)
+end
+
+function Help:CreateUpEffect(parent)
+if not parent then return end
+-- LocalScript posizionato dentro l'ImageButton
+local button = script.Parent
+
+-- IMPOSTAZIONI: Modifica questi valori come desideri
+local ALTEZZA_AGGIUNTIVA = 20 -- Di quanti pixel vuoi far alzare il pulsante
+local VELOCITA_TWEEN = 0.15   -- La durata dell'animazione in secondi
+
+-- Salva la posizione originale del pulsante
+local posizioneOriginale = button.Position
+
+-- Calcola la posizione sollevata (sottrae sull'asse Y per andare verso l'alto)
+local posizioneSollevata = UDim2.new(
+	posizioneOriginale.X.Scale,
+	posizioneOriginale.X.Offset,
+	posizioneOriginale.Y.Scale,
+	posizioneOriginale.Y.Offset - ALTEZZA_AGGIUNTIVA
+)
+
+-- Servizio per gestire le animazioni fluide (Tween)
+local infoAnimazione = TweenInfo.new(VELOCITA_TWEEN, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+-- Funzione per muovere il pulsante
+local function muoviPulsante(posizioneTarget)
+	local tween = TweenService:Create(button, infoAnimazione, {Position = posizioneTarget})
+	tween:Play()
+end
+
+-- Rileva quando il mouse entra nel pulsante (si alza)
+button.MouseEnter:Connect(function()
+	muoviPulsante(posizioneSollevata)
+end)
+
+-- Rileva quando il mouse esce dal pulsante (torna giù)
+button.MouseLeave:Connect(function()
+	muoviPulsante(posizioneOriginale)
+end)
+end
+
+function Help:CreateShakeLoop(parent)
+if not parent then return end
+local uiElement = script.Parent -- L'elemento UI su cui è applicato lo script
+
+-- Configurazione dell'animazione
+local gradiOscillazione = 15 -- Gradi massimi di inclinazione a destra e sinistra
+local durataFase = 0.2 -- Quanto ci mette a fare ogni singolo movimento (più basso = più veloce)
+
+-- Creiamo le informazioni del Tween
+local infoTween = TweenInfo.new(durataFase, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+
+-- Calcoliamo le rotazioni (le UI usano gradi singoli per la proprietà Rotation)
+local rotazioneIniziale = uiElement.Rotation
+local rotazioneDestra = rotazioneIniziale + gradiOscillazione
+local rotazioneSinistra = rotazioneIniziale - gradiOscillazione
+
+-- Definiamo i movimenti fluidi
+local tweenDestra = TweenService:Create(uiElement, infoTween, {Rotation = rotazioneDestra})
+local tweenSinistra = TweenService:Create(uiElement, infoTween, {Rotation = rotazioneSinistra})
+local tweenRitorno = TweenService:Create(uiElement, infoTween, {Rotation = rotazioneIniziale})
+
+local function Two2LeftRight()
+	tweenDestra:Play()
+	tweenDestra.Completed:Wait()
+
+	-- Oscilla a sinistra
+	tweenSinistra:Play()
+	tweenSinistra.Completed:Wait()
+	
+	tweenDestra:Play()
+	tweenDestra.Completed:Wait()
+
+	-- Oscilla a sinistra
+	tweenSinistra:Play()
+	tweenSinistra.Completed:Wait()
+end
+
+-- Ciclo infinito (Loop) dell'effetto
+while true do
+	-- Oscilla a destra
+	Two2LeftRight()
+
+	-- Ritorna dritto alla rotazione iniziale
+	tweenRitorno:Play()
+	tweenRitorno.Completed:Wait()
+
+	-- Piccola pausa opzionale prima di rifarlo (impostata a 0.5 secondi)
+	task.wait(0.5) 
+end
+end
+
+function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	if not parent then return end
 	if not imgId then return end
 	if not iconId then return end
 	if not txt then txt = "Label" end
+	CrTab = CrTab or {
+		Shake = true,
+		ClickEffect = true,
+		Burst = true,
+		TextSmooth = true,
+		ImageFall = true,
+		BigEffect = true,
+		UpEffect = true
+	}
 	local ImgBtn = Instance.new("ImageButton")
 	ImgBtn.ScaleType = Enum.ScaleType.Tile
 	ImgBtn.BackgroundColor3 = Color3.fromRGB(94, 167, 255)
@@ -305,12 +461,47 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt)
 	StrokeLbl.Thickness = 2
 	StrokeLbl.Parent = Label
 
+	if CrTab.Shake == true then
 	H:CreateShake(ImgBtn)
+	end
+	if CrTab.ClickEffect == true then
 	H:CreateClickEffect(ImgBtn, iconId, nicon)
+	end
+	if CrTab.Burst == true then
 	H:CreateBurst(ImgBtn)
+	end
+	if CrTab.TextSmooth == true then
 	H:CreateTextSmooth(Label)
+	end
+	if CrTab.ImageFall == true then
 	H:CreateImageFall(ImgBtn, iconId)
+	end
+	if CrTab.BigEffect == true then
+	H:CreateBigEffect(ImgBtn)
+	end
+	if CrTab.BigEffect == true then
+	H:CreateUpEffect(ImgBtn)
+	end
 end
 
+function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt)
+	if not parent then return end
+
+	local Frame = Instance.new("Frame")
+	Frame.BackgroundColor3 = Color3.fromRGB(52, 94, 142)
+	Frame.Size = UDim2.new(0, 103, 0, 107)
+	Frame.Position = UDim2.new(0.90092, 0, 0.02516, 0)
+	Frame.Parent = parent
+
+	local Gradient = Instance.new("UIGradient")
+	Gradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(0, 171, 255)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(0, 171, 255))}
+	Gradient.Parent = Frame
+
+	local Stroke = Instance.new("UIStroke")
+	Stroke.Thickness = 5
+	Stroke.Parent = Frame
+
+	
+end
 -- contiue tomorrow
 return Help
