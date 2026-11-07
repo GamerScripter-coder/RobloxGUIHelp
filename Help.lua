@@ -122,7 +122,7 @@ pulsante.MouseButton1Click:Connect(function()
 end)
 end
 
-function Help:CreateCoolImgBtn(parent, imgId, iconId, nicon, txt)
+function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt)
 	if not parent then return end
 	if not imgId then return end
 	if not iconId then return end
