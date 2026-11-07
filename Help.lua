@@ -484,9 +484,20 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	end
 end
 
-function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt)
+function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	if not parent then return end
-
+	if not imgId then return end
+	if not txt then return end
+	CrTab = CrTab or {
+		Shake = true,
+		ClickEffect = true,
+		Burst = true,
+		TextSmooth = true,
+		ImageFall = true,
+		BigEffect = true,
+		UpEffect = true
+	}
+	
 	local Frame = Instance.new("Frame")
 	Frame.BackgroundColor3 = Color3.fromRGB(52, 94, 142)
 	Frame.Size = UDim2.new(0, 103, 0, 107)
@@ -501,7 +512,7 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt)
 	Stroke.Thickness = 5
 	Stroke.Parent = Frame
 
-	
+	H:CoolImgBtn(Frame, imgId, iconId, nicon, txt, CrTab)
 end
 -- contiue tomorrow
 return Help
