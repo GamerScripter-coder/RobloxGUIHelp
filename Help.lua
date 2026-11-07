@@ -191,7 +191,6 @@ end
 
 function Help:CreateTextSmooth(label)
 if not label then return end
-if not label:IsA("TextLabel") then return end
 local textLabel = label
 textLabel.RichText = true
 
