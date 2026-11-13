@@ -410,6 +410,74 @@ while true do
 end
 end
 
+function Help:CreateClickMini(parent)
+-- Riferimento al bottone (il Parent diretto dello script)
+local bottone = parent
+
+-- === IMPOSTAZIONI PERSONALIZZABILI ===
+local FATTORE_SCALA = 0.9       -- Quanto si rimpiccioliscono (0.85 = 85% della grandezza originale)
+local TEMPO_ATTESA = 0.12         -- Quanti secondi rimangono piccoli prima di tornare normali
+local DURATA_ANIMAZIONE = 0.12   -- Velocità dell'effetto di rimpicciolimento/ingrandimento
+-- =====================================
+
+local infoAnimazione = TweenInfo.new(
+	DURATA_ANIMAZIONE,
+	Enum.EasingStyle.Quad,
+	Enum.EasingDirection.Out
+)
+
+-- Funzione per creare facilmente i due tween (rimpicciolisci e ripristina) per un oggetto
+local function creaTweenPerOggetto(oggetto)
+	local dimOriginale = oggetto.Size
+	local dimPiccola = UDim2.new(
+		dimOriginale.X.Scale * FATTORE_SCALA,
+		dimOriginale.X.Offset * FATTORE_SCALA,
+		dimOriginale.Y.Scale * FATTORE_SCALA,
+		dimOriginale.Y.Offset * FATTORE_SCALA
+	)
+
+	local tPiccolo = TweenService:Create(oggetto, infoAnimazione, {Size = dimPiccola})
+	local tOriginale = TweenService:Create(oggetto, infoAnimazione, {Size = dimOriginale})
+
+	return tPiccolo, tOriginale
+end
+
+-- Crea i tween per il bottone
+local tweenBottonePiccolo, tweenBottoneOriginale = creaTweenPerOggetto(bottone)
+
+-- Crea i tween anche per il Frame genitore, se esiste
+local tweenFramePiccolo, tweenFrameOriginale = nil, nil
+if bottone.Parent and bottone.Parent:IsA("Frame") then
+	tweenFramePiccolo, tweenFrameOriginale = creaTweenPerOggetto(bottone.Parent)
+end
+
+local inAnimazione = false
+
+bottone.MouseButton1Click:Connect(function()
+	if inAnimazione then return end
+	inAnimazione = true
+
+	-- 1. Rimpicciolisce entrambi contemporaneamente
+	tweenBottonePiccolo:Play()
+	if tweenFramePiccolo then
+		tweenFramePiccolo:Play()
+	end
+	tweenBottonePiccolo.Completed:Wait()
+
+	-- 2. Aspetta il numero di secondi scelto
+	task.wait(TEMPO_ATTESA)
+
+	-- 3. Riporta entrambi alla grandezza originale contemporaneamente
+	tweenBottoneOriginale:Play()
+	if tweenFrameOriginale then
+		tweenFrameOriginale:Play()
+	end
+	tweenBottoneOriginale.Completed:Wait()
+
+	inAnimazione = false
+end)
+end
+
 function Help:CreateWant(parent, CrTab, iconId, nicon)
 	if not parent then return end
 	if not Tab then return end
@@ -454,7 +522,8 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 		TextSmooth = true,
 		ImageFall = true,
 		BigEffect = true,
-		UpEffect = true
+		UpEffect = true,
+		ClickMini = true
 	}
 	local ImgBtn = Instance.new("ImageButton")
 	ImgBtn.ScaleType = Enum.ScaleType.Tile
@@ -497,7 +566,7 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	H:CreateWant(ImgBtn, CrTab, iconId, nicon)
 end
 
-function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
+function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, rt)
 	if not parent then return end
 	if not imgId then return end
 	if not txt then return end
@@ -508,7 +577,8 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 		TextSmooth = true,
 		ImageFall = true,
 		BigEffect = true,
-		UpEffect = true
+		UpEffect = true,
+		ClickMini = true
 	}
 	local SendTabFr = nil
 	local SendTabBt = nil
@@ -535,7 +605,8 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 			ClickEffect = false,
 			Burst = false,
 			TextSmooth = false,
-			ImageFall = false
+			ImageFall = false,
+			ClickMini = false
 		}
 	else
 		SendTabFr = {
@@ -545,7 +616,8 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 			ClickEffect = false,
 			Burst = false,
 			TextSmooth = false,
-			ImageFall = false
+			ImageFall = false,
+			ClickMini = false
 		}
 
 		SendTabBt = {
@@ -555,13 +627,46 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 			ClickEffect = CrTab.ClickEffect,
 			Burst = CrTab.Burst,
 			TextSmooth = CrTab.TextSmooth,
-			ImageFall = CrTab.ImageFall
+			ImageFall = CrTab.ImageFall,
+			ClickMini = CrTab.ClickMini
 		}
 	end
 
 	H:CreateWant(Frame, SendTabFr, nil, nil)
 
 	H:CoolImgBtn(Frame, imgId, iconId, nicon, txt, SendTabBtn)
+
+	if rt == true then
+		return Frame
+	end
+end
+
+function Help:CoolImgBtnWithImg(parent, imgId, iconId, nicon, txt, CrTab)
+	if not parent then return end
+	if not imgId then return end
+	if not txt then txt = "Label" end
+	CrTab = CrTab or {
+		Shake = true,
+		ClickEffect = true,
+		Burst = true,
+		TextSmooth = true,
+		ImageFall = true,
+		BigEffect = true,
+		UpEffect = true,
+		ClickMini = true
+	}
+	local frame = H:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
+	if frame then
+	local btn = frame:FindFirstChild("ImageButton")
+	if btn then
+		local ImgLabel = Instance.new("ImageLabel")
+		ImgLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+		ImgLabel.Image = "rbxassetid://103092378330251"
+		ImgLabel.Size = UDim2.new(0.80612, 0, 0.85714, 0);
+		ImgLabel.BackgroundTransparency = 1
+		ImgLabel.Parent = btn
+	end
+	end
 end
 -- contiue tomorrow
 return Help
