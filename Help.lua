@@ -410,6 +410,38 @@ while true do
 end
 end
 
+function Help:CreateWant(parent, CrTab, iconId, nicon)
+	if not parent then return end
+	if not Tab then return end
+
+	if CrTab.Shake == true then
+	H:CreateShake(parent)
+	end
+	if CrTab.ClickEffect == true then
+	if not iconId then return end
+	if not nicon then return end
+	H:CreateClickEffect(parent, iconId, nicon)
+	end
+	if CrTab.Burst == true then
+	H:CreateBurst(parent)
+	end
+	if CrTab.TextSmooth == true then
+	if not parent:FindFirstChildOfClass("TextLabel") then return end
+	local Label = parent:FindFirstChildOfClass("TextLabel")
+	H:CreateTextSmooth(Label)
+	end
+	if CrTab.ImageFall == true then
+	if not iconId then return end
+	H:CreateImageFall(parent, iconId)
+	end
+	if CrTab.BigEffect == true then
+	H:CreateBigEffect(parent)
+	end
+	if CrTab.UpEffect == true then
+	H:CreateUpEffect(parent)
+	end
+end
+
 function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	if not parent then return end
 	if not imgId then return end
@@ -452,6 +484,7 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	Label.BackgroundTransparency = 1
 	Label.Size = UDim2.new(1, 0, 1, 0)
 	Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Label.Text = txt
 	Label.Parent = ImgBtn
 
 	local SquareLbl = Instance.new("UIAspectRatioConstraint")
@@ -461,27 +494,7 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	StrokeLbl.Thickness = 2
 	StrokeLbl.Parent = Label
 
-	if CrTab.Shake == true then
-	H:CreateShake(ImgBtn)
-	end
-	if CrTab.ClickEffect == true then
-	H:CreateClickEffect(ImgBtn, iconId, nicon)
-	end
-	if CrTab.Burst == true then
-	H:CreateBurst(ImgBtn)
-	end
-	if CrTab.TextSmooth == true then
-	H:CreateTextSmooth(Label)
-	end
-	if CrTab.ImageFall == true then
-	H:CreateImageFall(ImgBtn, iconId)
-	end
-	if CrTab.BigEffect == true then
-	H:CreateBigEffect(ImgBtn)
-	end
-	if CrTab.BigEffect == true then
-	H:CreateUpEffect(ImgBtn)
-	end
+	H:CreateWant(ImgBtn, CrTab, iconId, nicon)
 end
 
 function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
@@ -497,6 +510,8 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 		BigEffect = true,
 		UpEffect = true
 	}
+	local SendTabFr = nil
+	local SendTabBt = nil
 	
 	local Frame = Instance.new("Frame")
 	Frame.BackgroundColor3 = Color3.fromRGB(52, 94, 142)
@@ -512,7 +527,41 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	Stroke.Thickness = 5
 	Stroke.Parent = Frame
 
-	H:CoolImgBtn(Frame, imgId, iconId, nicon, txt, CrTab)
+	if CrTab.Shake == true and CrTab.BigEffect == true and CrTab.UpEffect == true then
+		SendTabFr = {
+			Shake = true,
+			BigEffect = true,
+			UpEffect = true,
+			ClickEffect = false,
+			Burst = false,
+			TextSmooth = false,
+			ImageFall = false
+		}
+	else
+		SendTabFr = {
+			Shake = false,
+			BigEffect = false,
+			UpEffect = false,
+			ClickEffect = false,
+			Burst = false,
+			TextSmooth = false,
+			ImageFall = false
+		}
+
+		SendTabBt = {
+			Shake = false,
+			BigEffect = false,
+			UpEffect = false,
+			ClickEffect = CrTab.ClickEffect,
+			Burst = CrTab.Burst,
+			TextSmooth = CrTab.TextSmooth,
+			ImageFall = CrTab.ImageFall
+		}
+	end
+
+	H:CreateWant(Frame, SendTabFr, nil, nil)
+
+	H:CoolImgBtn(Frame, imgId, iconId, nicon, txt, SendTabBtn)
 end
 -- contiue tomorrow
 return Help
