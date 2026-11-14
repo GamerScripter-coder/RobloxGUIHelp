@@ -661,6 +661,7 @@ function Help:CoolImgBtnWithImg(parent, imgId, iconId, nicon, txt, CrTab)
 	if btn then
 		local ImgLabel = Instance.new("ImageLabel")
 		ImgLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+		ImgLabel.Postion = UDim2.new(0.505, 0,0.49, 0)
 		ImgLabel.Image = "rbxassetid://103092378330251"
 		ImgLabel.Size = UDim2.new(0.80612, 0, 0.85714, 0);
 		ImgLabel.BackgroundTransparency = 1
