@@ -634,7 +634,7 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, rt)
 
 	H:CreateWant(Frame, SendTabFr, nil, nil)
 
-	H:CoolImgBtn(Frame, imgId, iconId, nicon, txt, SendTabBtn)
+	H:CoolImgBtn(Frame, imgId, iconId, nicon, txt, SendTabBt)
 
 	if rt == true then
 		return Frame
