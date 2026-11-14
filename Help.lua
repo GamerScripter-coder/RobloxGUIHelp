@@ -480,7 +480,7 @@ end
 
 function Help:CreateWant(parent, CrTab, iconId, nicon)
 	if not parent then return end
-	if not Tab then return end
+	if not CrTab then return end
 
 	if CrTab.Shake == true then
 	H:CreateShake(parent)
