@@ -361,7 +361,7 @@ end
 
 function Help:CreateShakeLoop(parent)
 if not parent then return end
-local uiElement = script.Parent -- L'elemento UI su cui è applicato lo script
+local uiElement = parent -- L'elemento UI su cui è applicato lo script
 
 -- Configurazione dell'animazione
 local gradiOscillazione = 15 -- Gradi massimi di inclinazione a destra e sinistra
