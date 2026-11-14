@@ -266,7 +266,7 @@ end
 function Help:CreateBigEffect(parent)
 	if not parent then return end
 
-local ImageButton = script.Parent
+local ImageButton = parent
 
 -- Aggiungi un UIScale se non esiste già
 local uiScale = ImageButton:FindFirstChildOfClass("UIScale")
@@ -322,7 +322,7 @@ end
 function Help:CreateUpEffect(parent)
 if not parent then return end
 -- LocalScript posizionato dentro l'ImageButton
-local button = script.Parent
+local button = parent
 
 -- IMPOSTAZIONI: Modifica questi valori come desideri
 local ALTEZZA_AGGIUNTIVA = 20 -- Di quanti pixel vuoi far alzare il pulsante
