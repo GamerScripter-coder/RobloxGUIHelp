@@ -655,7 +655,7 @@ function Help:CoolImgBtnWithImg(parent, imgId, iconId, nicon, txt, CrTab)
 		UpEffect = true,
 		ClickMini = true
 	}
-	local frame = H:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
+	local frame = H:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, true)
 	if frame then
 	local btn = frame:FindFirstChild("ImageButton")
 	if btn then
