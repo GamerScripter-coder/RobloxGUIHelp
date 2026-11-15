@@ -141,6 +141,7 @@ function Help:CreateBurst(parent)
 	Img.BackgroundTransparency = 1
 	Img.ZIndex = 0
 	Img.Size = UDim2.new(1,0,1,0)
+	Img.Image = "rbxassetid://84880292033466"
 	Img.Parent = parent
 
 	local LocalScript3 = Instance.new("LocalScript")
