@@ -582,7 +582,6 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	local ImgBtn = Instance.new("ImageButton")
 	ImgBtn.ScaleType = Enum.ScaleType.Tile
 	ImgBtn.BackgroundColor3 = Color3.fromRGB(94, 167, 255)
-	ImgBtn.Image = imgId
 	ImgBtn.TileSize = UDim2.new(0, 100, 0, 100)
 	ImgBtn.Size = UDim2.new(0, 98, 0, 107)
 	ImgBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
