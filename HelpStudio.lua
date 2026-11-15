@@ -148,13 +148,6 @@ LocalScript3.Name = "Burst"
 LocalScript3.Parent = Img
 LocalScript3.Source = [[
 local RunService = game:GetService("RunService")
-		
-local Img = Instance.new("ImageLabel")
-Img.Name = "Burst"
-Img.BackgroundTransparency = 1
-Img.ZIndex = 0
-Img.Image = "rbxassetid://84880292033466"
-Img.Parent = script.Parent
 
 local uiElement = script.Parent
 local velocitaRotazione = 45
