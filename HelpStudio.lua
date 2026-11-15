@@ -148,7 +148,7 @@ Img.ZIndex = 0
 Img.Image = "rbxassetid://84880292033466"
 Img.Parent = script.Parent
 
-local uiElement = parent
+local uiElement = script.Parent
 local velocitaRotazione = 45
 
 RunService.RenderStepped:Connect(function(deltaTime)
