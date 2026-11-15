@@ -167,10 +167,10 @@ local parentUI = script.Parent
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
-local IMAGE_ID = %q -- Sostituisci con il tuo ID immagine
-local FREQUENZA_SPAWN = 0.3 -- Ogni quanti secondi spawna una cometa
-local VELOCITA_CADUTA = 1.5 -- Quanto tempo (in secondi) ci mette a scendere
-local DIMENSIONE_COMETA = UDim2.new(0, 40, 0, 40) -- Larghezza e altezza in pixel
+local IMAGE_ID = %q
+local FREQUENZA_SPAWN = 0.3
+local VELOCITA_CADUTA = 1.5
+local DIMENSIONE_COMETA = UDim2.new(0, 40, 0, 40)
 
 local ultimoSpawn = 0
 
