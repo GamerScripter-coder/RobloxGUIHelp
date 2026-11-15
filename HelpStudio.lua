@@ -13,9 +13,10 @@ function Help:CreateShake(parent)
   local LocalScript1 = Instance.new("LocalScript")
   LocalScript1.Name = "ShakeEffect"
   LocalScript1.Parent = parent
-  LocalScript1.Source = string.format([[
+  LocalScript1.Source = [[
   local button = script.Parent
-  local RunService = %q
+  local UIS = game:GetService("UserInputService")
+  local RunService = game:GetService("RunService")
   local MAX_DISTANCE = 80 -- Distanza massima (in pixel) per attivare l'oscillazione
   local MAX_ROTATION = 15 -- Gradi massimi di rotazione dell'oscillazione
 
@@ -47,7 +48,7 @@ function Help:CreateShake(parent)
 	  -- Effetto elastico / Interpolazione fluida
 	  currentRotation = currentRotation + (targetRotation - currentRotation) * (speed * dt)
 	  button.Rotation = currentRotation
-  end)]], RunService)
+  end)]]
 end
 
 function Help:CreateClickEffect(parent, iconId, nicon)
@@ -138,6 +139,8 @@ local LocalScript3 = Instance.new("LocalScript")
 LocalScript3.Name = "Burst"
 LocalScript3.Parent = parent
 LocalScript3.Source = string.format([[
+local RunService = game:GetService("RunService")
+		
 local Img = Instance.new("ImageLabel")
 Img.Name = "Burst"
 Img.BackgroundTransparency = 1
@@ -216,8 +219,8 @@ if not label:IsA("TextLabel") then return end
 local LocalScript5 = Instance.new("LocalScript")
 LocalScript5.Name = "TextSmooth"
 LocalScript5.Parent = label
-LocalScript5.Source = string.format([[
-local textLabel = %q
+LocalScript5.Source = [[
+local textLabel = script.Parent
 textLabel.RichText = true
 local RunService = game:GetService("RunService")
 
@@ -287,7 +290,7 @@ local function aggiornaOndaSmooth()
 	textLabel.Text = testoFormattato
 end
 
-RunService.RenderStepped:Connect(aggiornaOndaSmooth)]], label)
+RunService.RenderStepped:Connect(aggiornaOndaSmooth)]]
 end
 
 function Help:CreateBigEffect(parent)
