@@ -9,73 +9,73 @@ local TweenService = game:GetService("TweenService")
 -- if you're using it for a script that can run a executor that's no problem
 
 function Help:CreateShake(parent)
-  if not parent then return end
-  local LocalScript1 = Instance.new("LocalScript")
-  LocalScript1.Name = "ShakeEffect"
-  LocalScript1.Parent = parent
-  LocalScript1.Source = [[
-  local button = script.Parent
+	  if not parent then return end
+	local LocalScript1 = Instance.new("LocalScript")
+	LocalScript1.Name = "ShakeEffect"
+	LocalScript1.Parent = parent
+	LocalScript1.Source = [[
+  local button = script.Parent
   local UIS = game:GetService("UserInputService")
   local RunService = game:GetService("RunService")
-  local MAX_DISTANCE = 80 -- Distanza massima (in pixel) per attivare l'oscillazione
-  local MAX_ROTATION = 15 -- Gradi massimi di rotazione dell'oscillazione
+  local MAX_DISTANCE = 80 -- Distanza massima (in pixel) per attivare l'oscillazione
+  local MAX_ROTATION = 15 -- Gradi massimi di rotazione dell'oscillazione
 
-  local targetRotation = 0
-  local currentRotation = 0
-  local speed = 15 -- Velocità di ritorno elastico
+  local targetRotation = 0
+  local currentRotation = 0
+  local speed = 15 -- Velocità di ritorno elastico
 
-  RunService.RenderStepped:Connect(function(dt)
-	  local mousePos = UIS:GetMouseLocation()
+  RunService.RenderStepped:Connect(function(dt)
+	  local mousePos = UIS:GetMouseLocation()
 
-	  -- Calcola il centro dell'ImageButton sullo schermo
-	  local buttonCenter = button.AbsolutePosition + (button.AbsoluteSize / 2)
+	  -- Calcola il centro dell'ImageButton sullo schermo
+	  local buttonCenter = button.AbsolutePosition + (button.AbsoluteSize / 2)
 
-	  -- Calcola la distanza tra il mouse e il centro del pulsante
-	  local distanceVector = mousePos - buttonCenter
-	  local distance = distanceVector.Magnitude
+	  -- Calcola la distanza tra il mouse e il centro del pulsante
+	  local distanceVector = mousePos - buttonCenter
+	  local distance = distanceVector.Magnitude
 
-	  if distance < MAX_DISTANCE then
-		  -- Più il mouse è vicino, più l'effetto è forte
-		  local intensity = 1 - (distance / MAX_DISTANCE)
+	  if distance < MAX_DISTANCE then
+		  -- Più il mouse è vicino, più l'effetto è forte
+		  local intensity = 1 - (distance / MAX_DISTANCE)
 
-		  -- Oscilla in base al movimento del mouse e al tempo
-		  targetRotation = math.sin(tick() * 10) * (MAX_ROTATION * intensity)
-	  else
-		  -- Se il mouse è lontano, torna dritto
-		  targetRotation = 0
-	  end
+		  -- Oscilla in base al movimento del mouse e al tempo
+		  targetRotation = math.sin(tick() * 10) * (MAX_ROTATION * intensity)
+	  else
+		  -- Se il mouse è lontano, torna dritto
+		  targetRotation = 0
+	  end
 
-	  -- Effetto elastico / Interpolazione fluida
-	  currentRotation = currentRotation + (targetRotation - currentRotation) * (speed * dt)
-	  button.Rotation = currentRotation
-  end)]]
+	  -- Effetto elastico / Interpolazione fluida
+	  currentRotation = currentRotation + (targetRotation - currentRotation) * (speed * dt)
+	  button.Rotation = currentRotation
+  end)]]
 end
 
 function Help:CreateClickEffect(parent, iconId, nicon)
-  if not parent then return end
-  if not iconId then return end
-  if not nicon then nicon = 21 end
+	  if not parent then return end
+	  if not iconId then return end
+	if not nicon then nicon = 21 end
 
-local LocalScript2 = Instance.new("LocalScript")
-LocalScript2.Name = "ClickEffect"
-LocalScript2.Parent = parent
-LocalScript2.Source = string.format([[
+	local LocalScript2 = Instance.new("LocalScript")
+	LocalScript2.Name = "ClickEffect"
+	LocalScript2.Parent = parent
+	LocalScript2.Source = string.format([[
 local pulsante = script.Parent
 local TweenService = game:GetService("TweenService")
 local rng = Random.new()
 
 -- IMPOSTAZIONI PERSONALIZZABILI
 local ID_ICONA = %q -- Sostituisci con il tuo ID Asset
-local NUMERO_ICONE = %d                    -- Quante icone generare a ogni click
+local NUMERO_ICONE = %d                    -- Quante icone generare a ogni click
 local DIMENSIONE_ICONA = UDim2.new(0, 45, 0, 45) -- Dimensione finale dell'icona
-local TEMPO_ANIMAZIONE_APRI = 0.7          -- Durata dello spargimento iniziale
-local TEMPO_ANIMAZIONE_CHIUDI = 0.7        -- Durata della dissolvenza finale
+local TEMPO_ANIMAZIONE_APRI = 0.7          -- Durata dello spargimento iniziale
+local TEMPO_ANIMAZIONE_CHIUDI = 0.7        -- Durata della dissolvenza finale
 local DoingEffect = false
 
 -- 🛠️ IMPOSTAZIONI DEL RAGGIO (IN PIXEL)
-local RAGGIO_MINIMO = 95                   -- Distanza minima dal pulsante
-local RAGGIO_MASSIMO = 95                 -- Distanza massima dal pulsante
--- NOTA: Se vuoi che vadano tutte alla STESSA identica distanza, 
+local RAGGIO_MINIMO = 95                   -- Distanza minima dal pulsante
+local RAGGIO_MASSIMO = 95                 -- Distanza massima dal pulsante
+-- NOTA: Se vuoi che vadano tutte alla STESSA identica distanza, 
 -- imposta sia RAGGIO_MINIMO che RAGGIO_MASSIMO allo stesso numero (es. 120 e 120).
 
 pulsante.MouseButton1Click:Connect(function()
@@ -94,7 +94,7 @@ pulsante.MouseButton1Click:Connect(function()
 		local angoloCasuale = rng:NextNumber(0, 2 * math.pi)
 
 		-- 🎯 Calcola il raggio casuale compreso tra il minimo e il massimo che hai scelto
-		local raggioCasuale = rng:NextNumber(RAGGIO_MINIMO, RAGGIO_MASSIMO) 
+		local raggioCasuale = rng:NextNumber(RAGGIO_MINIMO, RAGGIO_MASSIMO) 
 
 		local offsetX = math.cos(angoloCasuale) * raggioCasuale
 		local offsetY = math.sin(angoloCasuale) * raggioCasuale
@@ -135,18 +135,18 @@ end)]], iconId, nicon)
 end
 
 function Help:CreateBurst(parent)
-if not parent then return end
-local Img = Instance.new("ImageLabel")
-Img.Name = "Burst"
-Img.BackgroundTransparency = 1
-Img.ZIndex = 0
-Img.Image = "rbxassetid://84880292033466"
-Img.Parent = parent
-	
-local LocalScript3 = Instance.new("LocalScript")
-LocalScript3.Name = "Burst"
-LocalScript3.Parent = Img
-LocalScript3.Source = [[
+	if not parent then return end
+	local Img = Instance.new("ImageLabel")
+	Img.Name = "Burst"
+	Img.BackgroundTransparency = 1
+	Img.ZIndex = 0
+	Img.Image = "rbxassetid://84880292033466"
+	Img.Parent = parent
+
+	local LocalScript3 = Instance.new("LocalScript")
+	LocalScript3.Name = "Burst"
+	LocalScript3.Parent = Img
+	LocalScript3.Source = [[
 local RunService = game:GetService("RunService")
 
 local uiElement = script.Parent
@@ -158,12 +158,12 @@ end)]]
 end
 
 function Help:CreateImageFall(parent, iconId)
-if not parent then return end
-if not iconId then return end
-local LocalScript4 = Instance.new("LocalScript")
-LocalScript4.Name = "ImageFall"
-LocalScript4.Parent = parent
-LocalScript4.Source = [[
+	if not parent then return end
+	if not iconId then return end
+	local LocalScript4 = Instance.new("LocalScript")
+	LocalScript4.Name = "ImageFall"
+	LocalScript4.Parent = parent
+	LocalScript4.Source = [[
 local parentUI = script.Parent
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -215,12 +215,12 @@ end)]]
 end
 
 function Help:CreateTextSmooth(label)
-if not label then return end
-if not label:IsA("TextLabel") then return end
-local LocalScript5 = Instance.new("LocalScript")
-LocalScript5.Name = "TextSmooth"
-LocalScript5.Parent = label
-LocalScript5.Source = [[
+	if not label then return end
+	if not label:IsA("TextLabel") then return end
+	local LocalScript5 = Instance.new("LocalScript")
+	LocalScript5.Name = "TextSmooth"
+	LocalScript5.Parent = label
+	LocalScript5.Source = [[
 local textLabel = script.Parent
 textLabel.RichText = true
 local RunService = game:GetService("RunService")
@@ -295,11 +295,11 @@ RunService.RenderStepped:Connect(aggiornaOndaSmooth)]]
 end
 
 function Help:CreateBigEffect(parent)
-if not parent then return end
-local LocalScript6 = Instance.new("LocalScript")
-LocalScript6.Name = "BigEffect"
-LocalScript6.Parent = parent
-LocalScript6.Source = [[
+	if not parent then return end
+	local LocalScript6 = Instance.new("LocalScript")
+	LocalScript6.Name = "BigEffect"
+	LocalScript6.Parent = parent
+	LocalScript6.Source = [[
 local ImageButton = script.Parent
 local TweenService = game:GetService("TweenService")
   
@@ -329,11 +329,11 @@ end)]]
 end
 
 function Help:CreateTurnEffect(parent)
-if not parent then return end
-local LocalScript7 = Instance.new("LocalScript")
-LocalScript7.Name = "TurnEffect"
-LocalScript7.Parent = parent
-LocalScript7.Source = [[
+	if not parent then return end
+	local LocalScript7 = Instance.new("LocalScript")
+	LocalScript7.Name = "TurnEffect"
+	LocalScript7.Parent = parent
+	LocalScript7.Source = [[
 local Btn = script.Parent
 local TweenService = game:GetService("TweenService")
 
@@ -360,11 +360,11 @@ end)]]
 end
 
 function Help:CreateUpEffect(parent)
-if not parent then return end
-local LocalScript8 = Instance.new("LocalScript")
-LocalScript8.Name = "UpEffect"
-LocalScript8.Parent = parent
-LocalScript8.Source = [[
+	if not parent then return end
+	local LocalScript8 = Instance.new("LocalScript")
+	LocalScript8.Name = "UpEffect"
+	LocalScript8.Parent = parent
+	LocalScript8.Source = [[
 local button = script.Parent
 local TweenService = game:GetService("TweenService")
 
@@ -404,11 +404,11 @@ end)]]
 end
 
 function Help:CreateShakeLoop(parent)
-if not parent then return end
-local LocalScript9 = Instance.new("LocalScript")
-LocalScript9.Name = "ShakeLoop"
-LocalScript9.Parent = parent
-LocalScript9.Source = [[
+	if not parent then return end
+	local LocalScript9 = Instance.new("LocalScript")
+	LocalScript9.Name = "ShakeLoop"
+	LocalScript9.Parent = parent
+	LocalScript9.Source = [[
 local uiElement = script.Parent -- L'elemento UI su cui è applicato lo script
 local TweenService = game:GetService("TweenService")
 
@@ -460,10 +460,10 @@ end]]
 end
 
 function Help:CreateClickMini(parent)
-local LocalScript10 = Instance.new("LocalScript")
-LocalScript10.Name = "ClickMini"
-LocalScript10.Parent = parent
-LocalScript10.Source = [[
+	local LocalScript10 = Instance.new("LocalScript")
+	LocalScript10.Name = "ClickMini"
+	LocalScript10.Parent = parent
+	LocalScript10.Source = [[
 local bottone = script.Parent
 local TweenService = game:GetService("TweenService")
 
@@ -536,30 +536,30 @@ function Help:CreateWant(parent, CrTab, iconId, nicon)
 	if not CrTab then return end
 
 	if CrTab.Shake == true then
-	H:CreateShake(parent)
+		H:CreateShake(parent)
 	end
 	if CrTab.ClickEffect == true then
-	if not iconId then return end
-	if not nicon then return end
-	H:CreateClickEffect(parent, iconId, nicon)
+		if not iconId then return end
+		if not nicon then return end
+		H:CreateClickEffect(parent, iconId, nicon)
 	end
 	if CrTab.Burst == true then
-	H:CreateBurst(parent)
+		H:CreateBurst(parent)
 	end
 	if CrTab.TextSmooth == true then
-	if not parent:FindFirstChildOfClass("TextLabel") then return end
-	local Label = parent:FindFirstChildOfClass("TextLabel")
-	H:CreateTextSmooth(Label)
+		if not parent:FindFirstChildOfClass("TextLabel") then return end
+		local Label = parent:FindFirstChildOfClass("TextLabel")
+		H:CreateTextSmooth(Label)
 	end
 	if CrTab.ImageFall == true then
-	if not iconId then return end
-	H:CreateImageFall(parent, iconId)
+		if not iconId then return end
+		H:CreateImageFall(parent, iconId)
 	end
 	if CrTab.BigEffect == true then
-	H:CreateBigEffect(parent)
+		H:CreateBigEffect(parent)
 	end
 	if CrTab.UpEffect == true then
-	H:CreateUpEffect(parent)
+		H:CreateUpEffect(parent)
 	end
 end
 
@@ -635,7 +635,7 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, rt)
 	}
 	local SendTabFr = nil
 	local SendTabBt = nil
-	
+
 	local Frame = Instance.new("Frame")
 	Frame.BackgroundColor3 = Color3.fromRGB(52, 94, 142)
 	Frame.Size = UDim2.new(0, 103, 0, 107)
@@ -710,16 +710,16 @@ function Help:CoolImgBtnWithImg(parent, imgId, iconId, nicon, txt, CrTab)
 	}
 	local frame = H:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, true)
 	if frame then
-	local btn = frame:FindFirstChild("ImageButton")
-	if btn then
-		local ImgLabel = Instance.new("ImageLabel")
-		ImgLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-		ImgLabel.Position = UDim2.new(0.505, 0,0.49, 0)
-		ImgLabel.Image = "rbxassetid://103092378330251"
-		ImgLabel.Size = UDim2.new(0.80612, 0, 0.85714, 0);
-		ImgLabel.BackgroundTransparency = 1
-		ImgLabel.Parent = btn
-	end
+		local btn = frame:FindFirstChild("ImageButton")
+		if btn then
+			local ImgLabel = Instance.new("ImageLabel")
+			ImgLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+			ImgLabel.Position = UDim2.new(0.505, 0,0.49, 0)
+			ImgLabel.Image = "rbxassetid://103092378330251"
+			ImgLabel.Size = UDim2.new(0.80612, 0, 0.85714, 0);
+			ImgLabel.BackgroundTransparency = 1
+			ImgLabel.Parent = btn
+		end
 	end
 end
 -- contiue tomorrow
