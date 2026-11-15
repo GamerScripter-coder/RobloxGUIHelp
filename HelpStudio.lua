@@ -295,7 +295,7 @@ if not parent then return end
 local LocalScript6 = Instance.new("LocalScript")
 LocalScript6.Name = "BigEffect"
 LocalScript6.Parent = parent
-LocalScript6.Source = string.format([[
+LocalScript6.Source = [[
 local ImageButton = script.Parent
 local TweenService = game:GetService("TweenService")
   
@@ -321,12 +321,17 @@ end)
 -- Quando il mouse esce dall'ImageButton
 ImageButton.MouseLeave:Connect(function()
 	TweenService:Create(uiScale, tweenInfo, scaleNormal):Play()
-end)
+end)]]
 end
 
 function Help:CreateTurnEffect(parent)
-	if not parent then return end
-local Btn = parent
+if not parent then return end
+local LocalScript7 = Instance.new("LocalScript")
+LocalScript7.Name = "TurnEffect"
+LocalScript7.Parent = parent
+LocalScript7.Source = [[
+local Btn = script.Parent
+local TweenService = game:GetService("TweenService")
 
 -- Configurazione del Tween (durata di 0.2 secondi, stile fluido)
 local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
@@ -352,8 +357,12 @@ end
 
 function Help:CreateUpEffect(parent)
 if not parent then return end
--- LocalScript posizionato dentro l'ImageButton
-local button = parent
+local LocalScript8 = Instance.new("LocalScript")
+LocalScript8.Name = "UpEffect"
+LocalScript8.Parent = parent
+LocalScript8.Source = [[
+local button = script.Parent
+local TweenService = game:GetService("TweenService")
 
 -- IMPOSTAZIONI: Modifica questi valori come desideri
 local ALTEZZA_AGGIUNTIVA = 20 -- Di quanti pixel vuoi far alzare il pulsante
@@ -387,16 +396,17 @@ end)
 -- Rileva quando il mouse esce dal pulsante (torna giù)
 button.MouseLeave:Connect(function()
 	muoviPulsante(posizioneOriginale)
-end)]])
+end)]]
 end
 
 function Help:CreateShakeLoop(parent)
 if not parent then return end
-local LocalScript7 = Instance.new("LocalScript")
-LocalScript7.Name = "ShakeLoop"
-LocalScript7.Parent = parent
-LocalScript
+local LocalScript9 = Instance.new("LocalScript")
+LocalScript9.Name = "ShakeLoop"
+LocalScript9.Parent = parent
+LocalScript9.Source = [[
 local uiElement = script.Parent -- L'elemento UI su cui è applicato lo script
+local TweenService = game:GetService("TweenService")
 
 -- Configurazione dell'animazione
 local gradiOscillazione = 15 -- Gradi massimi di inclinazione a destra e sinistra
@@ -442,12 +452,16 @@ while true do
 
 	-- Piccola pausa opzionale prima di rifarlo (impostata a 0.5 secondi)
 	task.wait(0.5) 
-end
+end]]
 end
 
 function Help:CreateClickMini(parent)
--- Riferimento al bottone (il Parent diretto dello script)
-local bottone = parent
+local LocalScript10 = Instance.new("LocalScript")
+LocalScript10.Name = "ClickMini"
+LocalScript10.Parent = parent
+LocalScript10.Source = [[
+local bottone = script.Parent
+local TweenService = game:GetService("TweenService")
 
 -- === IMPOSTAZIONI PERSONALIZZABILI ===
 local FATTORE_SCALA = 0.9       -- Quanto si rimpiccioliscono (0.85 = 85% della grandezza originale)
@@ -510,7 +524,7 @@ bottone.MouseButton1Click:Connect(function()
 	tweenBottoneOriginale.Completed:Wait()
 
 	inAnimazione = false
-end)
+end)]]
 end
 
 function Help:CreateWant(parent, CrTab, iconId, nicon)
