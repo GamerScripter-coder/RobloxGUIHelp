@@ -162,12 +162,12 @@ if not iconId then return end
 local LocalScript4 = Instance.new("LocalScript")
 LocalScript4.Name = "ImageFall"
 LocalScript4.Parent = parent
-LocalScript4.Source = string.format([[
+LocalScript4.Source = [[
 local parentUI = script.Parent
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
-local IMAGE_ID = %q
+local IMAGE_ID = "]]..tostring(iconId)..[["
 local FREQUENZA_SPAWN = 0.3
 local VELOCITA_CADUTA = 1.5
 local DIMENSIONE_COMETA = UDim2.new(0, 40, 0, 40)
@@ -210,7 +210,7 @@ RunService.RenderStepped:Connect(function()
 		ultimoSpawn = tempoAttuale
 		creaCometa()
 	end
-end)]], iconId)
+end)]]
 end
 
 function Help:CreateTextSmooth(label)
