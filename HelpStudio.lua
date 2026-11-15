@@ -585,6 +585,7 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	ImgBtn.TileSize = UDim2.new(0, 100, 0, 100)
 	ImgBtn.Size = UDim2.new(0, 98, 0, 107)
 	ImgBtn.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ImgBtn.Image = "rbxassetid://6927295847"
 	ImgBtn.Parent = parent
 
 	local SquareBtn = Instance.new("UIAspectRatioConstraint")
