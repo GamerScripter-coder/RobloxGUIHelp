@@ -135,10 +135,18 @@ end)]], iconId, nicon)
 end
 
 function Help:CreateBurst(parent)
+if not parent then return end
+local Img = Instance.new("ImageLabel")
+Img.Name = "Burst"
+Img.BackgroundTransparency = 1
+Img.ZIndex = 0
+Img.Image = "rbxassetid://84880292033466"
+Img.Parent = parent
+	
 local LocalScript3 = Instance.new("LocalScript")
 LocalScript3.Name = "Burst"
-LocalScript3.Parent = parent
-LocalScript3.Source = string.format([[
+LocalScript3.Parent = Img
+LocalScript3.Source = [[
 local RunService = game:GetService("RunService")
 		
 local Img = Instance.new("ImageLabel")
@@ -153,7 +161,7 @@ local velocitaRotazione = 45
 
 RunService.RenderStepped:Connect(function(deltaTime)
 	uiElement.Rotation = uiElement.Rotation + (velocitaRotazione * deltaTime)
-end)]], RunService)
+end)]]
 end
 
 function Help:CreateImageFall(parent, iconId)
