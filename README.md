@@ -55,8 +55,8 @@ I file dei plugin in Roblox Studio (`.rbxmx` o `.lua`) devono essere inseriti ne
 
 ### 🎮 Come si usa il plugin:
 1. Apri il tuo progetto in **Roblox Studio**.
-2. Clicca sul pulsante del plugin **"Crea Bottoni"** nella barra degli strumenti (Toolbar).
-3. Si aprirà la finestra principale divisa in due colonne: a sinistra trovi i controlli e i pulsanti di creazione, a destra il **Code Viewer live** sincronizzato con GitHub.
+2. Clicca sul pulsante del plugin **"HelpStudio"** nella barra degli strumenti (Toolbar).
+3. Si aprirà la finestra principale divisa in due colonne: a sinistra trovi i controlli e i pulsanti di creazione, a destra il **Code Viewer Live** sincronizzato con GitHub.
 4. Seleziona una `ScreenGui` o un `Frame` nella finestra di Esplorazione (`Explorer`) del tuo gioco.
 5. Inserisci gli ID delle immagini desiderate (`imgId` e `iconId`), il numero di particelle (`nicon`) e il testo del bottone (`txt`).
 6. Clicca sui pulsanti di generazione (es. *Crea CoolImgBtn*) per creare istantaneamente la GUI stilizzata con tutti gli effetti applicati!
