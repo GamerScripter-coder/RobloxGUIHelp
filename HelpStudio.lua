@@ -532,35 +532,46 @@ bottone.MouseButton1Click:Connect(function()
 end)]]
 end
 
-function Help:CreateWant(parent, CrTab, iconId, nicon)
+function Help:CreateWant(parent, Name, iconId, nicon)
 	if not parent then return end
-	if not CrTab then return end
+	if not Name then return end
 
-	if CrTab.Shake == true then
+	if Name == "Shake" then
 		H:CreateShake(parent)
+		return
 	end
-	if CrTab.ClickEffect == true then
-		if not iconId then return end
-		if not nicon then return end
+	if Name == "BigEffect" then
+		H:CreateBigEffect(parent)
+		return
+	end
+	if Name == "UpEffect" then
+		H:CreateUpEffect(parent)
+		return
+	end
+	if Name == "ClickEffect" then
 		H:CreateClickEffect(parent, iconId, nicon)
+		return
 	end
-	if CrTab.Burst == true then
+	if Name == "Burst" then
 		H:CreateBurst(parent)
+		return
 	end
-	if CrTab.TextSmooth == true then
-		if not parent:FindFirstChildOfClass("TextLabel") then return end
+	if Name == "TextSmooth" then
 		local Label = parent:FindFirstChildOfClass("TextLabel")
 		H:CreateTextSmooth(Label)
+		return
 	end
-	if CrTab.ImageFall == true then
-		if not iconId then return end
+	if Name == "ImageFall" then
 		H:CreateImageFall(parent, iconId)
+		return
 	end
-	if CrTab.BigEffect == true then
-		H:CreateBigEffect(parent)
+	if Name == "ShakeLoop" then
+		H:CreateShakeLoop(parent)
+		return
 	end
-	if CrTab.UpEffect == true then
-		H:CreateUpEffect(parent)
+	if Name == "ClickMini" then
+		H:CreateClickMini(parent)
+		return
 	end
 end
 
@@ -577,6 +588,8 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 		ImageFall = true,
 		BigEffect = true,
 		UpEffect = true,
+		ClickMini = true,
+		ShakeLoop = true,
 		ClickMini = true
 	}
 	local ImgBtn = Instance.new("ImageButton")
@@ -617,6 +630,10 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	StrokeLbl.Thickness = 2
 	StrokeLbl.Parent = Label
 
+	if CrTab.Shake == true then
+		H:CreateWant(ImgBtn, "Shake"
+	end
+
 	H:CreateWant(ImgBtn, CrTab, iconId, nicon)
 end
 
@@ -634,6 +651,7 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, rt)
 		UpEffect = true,
 		ClickMini = true
 	}
+	
 	local SendTabFr = nil
 	local SendTabBt = nil
 
@@ -709,6 +727,7 @@ function Help:CoolImgBtnWithImg(parent, imgId, iconId, nicon, txt, CrTab)
 		UpEffect = true,
 		ClickMini = true
 	}
+	
 	local frame = H:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, true)
 	if frame then
 		local btn = frame:FindFirstChild("ImageButton")
