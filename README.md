@@ -6,7 +6,7 @@ Un toolkit avanzato per sviluppatori e scripter di Roblox, progettato per genera
 
 ## 📥 Download del Plugin per Roblox Studio
 Puoi scaricare l'ultima versione del plugin ufficiale direttamente dal link sottostante:
-👉 **[Scarica RobloxGUIHelp Plugin da MEGA](https://mega.nz/file/NDIH3ALJ#vf4g3i3qkHSDyvhojrYx_m8FZNQUsGTVyS54jcLE-UA)**
+👉 **[Scarica RobloxGUIHelp Plugin da MEGA](https://mega.nz/file/xf4RzC5C#FH886XQvMw2LGmuFme-EEjFRn0KJ91nbPf6fX2Ozl14)**
 
 ---
 
