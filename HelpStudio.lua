@@ -588,7 +588,7 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 		BigEffect = true,
 		UpEffect = true,
 		ClickMini = true,
-		ShakeLoop = true,
+		ShakeLoop = false,
 	}
 	local ImgBtn = Instance.new("ImageButton")
 	ImgBtn.ScaleType = Enum.ScaleType.Tile
@@ -671,7 +671,8 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, rt)
 		ImageFall = true,
 		BigEffect = true,
 		UpEffect = true,
-		ClickMini = true
+		ClickMini = true,
+		ShakeLoop = false
 	}
 	
 	local SendTabFr = nil
@@ -700,7 +701,8 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, rt)
 			Burst = false,
 			TextSmooth = false,
 			ImageFall = false,
-			ClickMini = false
+			ClickMini = false,
+			ShakeLoop = false
 		}
 	else
 		SendTabFr = {
@@ -711,7 +713,8 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, rt)
 			Burst = false,
 			TextSmooth = false,
 			ImageFall = false,
-			ClickMini = false
+			ClickMini = false,
+			ShakeLoop = false
 		}
 
 		SendTabBt = {
@@ -722,7 +725,8 @@ function Help:CoolFrameImgBtn(parent, imgId, iconId, nicon, txt, CrTab, rt)
 			Burst = CrTab.Burst,
 			TextSmooth = CrTab.TextSmooth,
 			ImageFall = CrTab.ImageFall,
-			ClickMini = CrTab.ClickMini
+			ClickMini = CrTab.ClickMini,
+			ShakeLoop = false
 		}
 	end
 
