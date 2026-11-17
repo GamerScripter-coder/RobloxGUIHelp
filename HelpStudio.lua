@@ -557,8 +557,7 @@ function Help:CreateWant(parent, Name, iconId, nicon)
 		return
 	end
 	if Name == "TextSmooth" then
-		local Label = parent:FindFirstChildOfClass("TextLabel")
-		H:CreateTextSmooth(Label)
+		H:CreateTextSmooth(parent)
 		return
 	end
 	if Name == "ImageFall" then
@@ -590,7 +589,6 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 		UpEffect = true,
 		ClickMini = true,
 		ShakeLoop = true,
-		ClickMini = true
 	}
 	local ImgBtn = Instance.new("ImageButton")
 	ImgBtn.ScaleType = Enum.ScaleType.Tile
@@ -630,8 +628,32 @@ function Help:CoolImgBtn(parent, imgId, iconId, nicon, txt, CrTab)
 	StrokeLbl.Thickness = 2
 	StrokeLbl.Parent = Label
 
-	if CrTab.Shake == true then
-		H:CreateWant(ImgBtn, "Shake"
+	if CrTab.Shake == true and not ImgBtn.Parent:IsA("Frame") then
+		H:CreateWant(ImgBtn, "Shake", nil, nil)
+	end
+	if CrTab.ClickEffect == true then
+		H:CreateWant(ImgBtn, "ClickEffect", iconId, nicon)
+	end
+	if CrTab.Burst == true then
+		H:CreateWant(ImgBtn, "Burst", nil, nil)
+	end
+	if CrTab.TextSmooth == true then
+		H:CreateWant(Label, "TextSmooth", nil, nil)
+	end
+	if CrTab.ImageFall == true then
+		H:CreateWant(ImgBtn, "ImageFall", iconId, nil)
+	end
+	if CrTab.BigEffect == true and not ImgBtn.Parent:IsA("Frame") then
+		H:CreateWant(ImgBtn, "BigEffect", nil, nil)
+	end
+	if CrTab.UpEffect == true and not ImgBtn.Parent:IsA("Frame") then
+		H:CreateWant(ImgBtn, "UpEffect", nil, nil)
+	end
+	if CrTab.ClickMini == true then
+		H:CreateWant(ImgBtn, "ClickMini", nil, nil)
+	end
+	if CrTab.ShakeLoop == true then
+		H:CreateWant(ImgBtn, "ShakeLoop", nil, nil)
 	end
 
 	H:CreateWant(ImgBtn, CrTab, iconId, nicon)
